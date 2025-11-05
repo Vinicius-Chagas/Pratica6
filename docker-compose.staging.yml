@@ -10,7 +10,7 @@ services:
       - db-volume:/var/lib/postgresql/data
 
   api:
-    image: vinicius902/Pratica6:latest
+    image: vinicius902/pratica6:latest
     networks:
       - default
     environment:
