@@ -1,0 +1,21 @@
+version: "4"
+
+services:
+  database:
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: sapi
+    volumes:
+      - db-volume:/var/lib/postgresql/data
+
+  api:
+    image: vinicius902/Pratica6:latest
+    networks:
+      - default
+    environment:
+      DB_HOST: database
+    ports:
+      - "3334:3334"
+volumes:
+  db-volume:
