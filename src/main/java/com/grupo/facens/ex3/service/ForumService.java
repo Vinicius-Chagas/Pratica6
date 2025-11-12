@@ -1,5 +1,8 @@
 package com.grupo.facens.ex3.service;
 
+import com.grupo.facens.ex3.domain.entities.Aluno;
+import com.grupo.facens.ex3.domain.entities.Comment;
+import com.grupo.facens.ex3.domain.entities.Post;
 import com.grupo.facens.ex3.dto.ForumActivityDto;
 import com.grupo.facens.ex3.model.Aluno;
 import com.grupo.facens.ex3.model.Comment;

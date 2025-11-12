@@ -1,6 +1,6 @@
 package com.grupo.facens.ex3.service;
 
-import com.grupo.facens.ex3.model.Aluno;
+import com.grupo.facens.ex3.domain.entities.Aluno;
 import com.grupo.facens.ex3.repository.AlunoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

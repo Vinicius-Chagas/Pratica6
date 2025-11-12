@@ -2,7 +2,8 @@ package com.grupo.facens.ex3;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import com.grupo.facens.ex3.model.Aluno;
+import com.grupo.facens.ex3.domain.entities.Aluno;
+import com.grupo.facens.ex3.domain.enums.TipoPlano;
 import com.grupo.facens.ex3.repository.AlunoRepository;
 import com.grupo.facens.ex3.service.MoedaService;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,7 +33,7 @@ class MoedaBDDTest {
         aluno.setNome("Carlos Premium");
         aluno.setEmail("carlos@exemplo.com");
         aluno.setCursosCompletados(12);
-        aluno.setPlano(Aluno.TipoPlano.PREMIUM);
+        aluno.setPlano(TipoPlano.PREMIUM);
         aluno.setMoedas(0);
         aluno.setCreditoCurso(0);
 
