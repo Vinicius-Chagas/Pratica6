@@ -1,6 +1,7 @@
 package com.grupo.facens.ex3.dto;
 
-import com.grupo.facens.ex3.model.Aluno;
+import com.grupo.facens.ex3.domain.entities.Aluno;
+import com.grupo.facens.ex3.domain.enums.TipoPlano;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -11,7 +12,7 @@ public class AlunoResumoDto {
     private Long id;
     private String nome;
     private String email;
-    private Aluno.TipoPlano plano;
+    private TipoPlano plano;
 
     public static AlunoResumoDto fromEntity(Aluno aluno) {
         return new AlunoResumoDto(

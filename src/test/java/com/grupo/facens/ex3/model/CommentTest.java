@@ -2,6 +2,9 @@ package com.grupo.facens.ex3.model;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import com.grupo.facens.ex3.domain.entities.Aluno;
+import com.grupo.facens.ex3.domain.entities.Post;
+import com.grupo.facens.ex3.domain.entities.Comment;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.Test;
 

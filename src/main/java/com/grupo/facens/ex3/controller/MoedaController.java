@@ -1,6 +1,6 @@
 package com.grupo.facens.ex3.controller;
 
-import com.grupo.facens.ex3.model.Aluno;
+import com.grupo.facens.ex3.domain.entities.Aluno;
 import com.grupo.facens.ex3.repository.AlunoRepository;
 import com.grupo.facens.ex3.service.MoedaService;
 import java.util.Map;

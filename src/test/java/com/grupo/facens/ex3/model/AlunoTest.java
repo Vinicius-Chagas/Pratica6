@@ -2,6 +2,8 @@ package com.grupo.facens.ex3.model;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import com.grupo.facens.ex3.domain.entities.Aluno;
+import com.grupo.facens.ex3.domain.enums.TipoPlano;
 import org.junit.jupiter.api.Test;
 
 class AlunoTest {
@@ -13,7 +15,7 @@ class AlunoTest {
 
         assertFalse(aluno.temPlanoBasico());
 
-        aluno.setPlano(Aluno.TipoPlano.BASICO);
+        aluno.setPlano(TipoPlano.BASICO);
         assertTrue(aluno.temPlanoBasico());
         assertFalse(aluno.temPlanoPremium());
     }
@@ -21,7 +23,7 @@ class AlunoTest {
     @Test
     void deveValidarPlanoPremium() {
         Aluno aluno = new Aluno();
-        aluno.setPlano(Aluno.TipoPlano.PREMIUM);
+        aluno.setPlano(TipoPlano.PREMIUM);
 
         assertTrue(aluno.temPlanoPremium());
         assertFalse(aluno.temPlanoBasico());

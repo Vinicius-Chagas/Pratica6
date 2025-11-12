@@ -3,7 +3,8 @@ package com.grupo.facens.ex3.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
-import com.grupo.facens.ex3.model.Aluno;
+import com.grupo.facens.ex3.domain.entities.Aluno;
+import com.grupo.facens.ex3.domain.enums.TipoPlano;
 import com.grupo.facens.ex3.repository.AlunoRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -36,7 +37,7 @@ class AssinaturaServiceTest {
     void deveAtivarPlanoBasicoQuandoAlunoValido() {
         assinaturaService.ativarAssinatura(aluno);
 
-        assertThat(aluno.getPlano()).isEqualTo(Aluno.TipoPlano.BASICO);
+        assertThat(aluno.getPlano()).isEqualTo(TipoPlano.BASICO);
         verify(alunoRepository).save(aluno);
     }
 
@@ -48,14 +49,14 @@ class AssinaturaServiceTest {
 
     @Test
     void deveVerificarAcessoPlanoBasico() {
-        aluno.setPlano(Aluno.TipoPlano.BASICO);
+        aluno.setPlano(TipoPlano.BASICO);
         assertThat(assinaturaService.verificarAcessoPlanBasico(aluno)).isTrue();
         assertThat(assinaturaService.verificarAcessoPlanBasico(null)).isFalse();
     }
 
     @Test
     void deveRetornarFalsoQuandoNaoPossuiPlanoBasico() {
-        aluno.setPlano(Aluno.TipoPlano.PREMIUM);
+        aluno.setPlano(TipoPlano.PREMIUM);
         assertThat(assinaturaService.verificarAcessoPlanBasico(aluno)).isFalse();
     }
 }
