@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import com.grupo.facens.ex3.domain.entities.Aluno;
 import com.grupo.facens.ex3.domain.entities.Comment;
 import com.grupo.facens.ex3.domain.entities.Post;
+import com.grupo.facens.ex3.domain.enums.TipoPlano;
 import com.grupo.facens.ex3.repository.AlunoRepository;
 import com.grupo.facens.ex3.service.ForumService;
 import org.junit.jupiter.api.BeforeEach;
@@ -35,7 +36,7 @@ class ForumBDDTest {
         aluno = new Aluno();
         aluno.setNome("Maria Silva");
         aluno.setEmail("maria@exemplo.com");
-        aluno.setPlano(Aluno.TipoPlano.BASICO);
+        aluno.setPlano(TipoPlano.BASICO);
         aluno.setMoedas(0);
         aluno.setCursosCompletados(0);
         aluno.setCreditoCurso(0);
@@ -44,7 +45,7 @@ class ForumBDDTest {
         outroAluno = new Aluno();
         outroAluno.setNome("João Santos");
         outroAluno.setEmail("joao@exemplo.com");
-        outroAluno.setPlano(Aluno.TipoPlano.BASICO);
+        outroAluno.setPlano(TipoPlano.BASICO);
         outroAluno.setMoedas(0);
         outroAluno.setCursosCompletados(0);
         outroAluno = alunoRepository.save(outroAluno);
@@ -52,7 +53,7 @@ class ForumBDDTest {
         alunoSomenteComentarios = new Aluno();
         alunoSomenteComentarios.setNome("Ana Silva");
         alunoSomenteComentarios.setEmail("ana@exemplo.com");
-        alunoSomenteComentarios.setPlano(Aluno.TipoPlano.BASICO);
+        alunoSomenteComentarios.setPlano(TipoPlano.BASICO);
         alunoSomenteComentarios.setMoedas(0);
         alunoSomenteComentarios.setCursosCompletados(0);
         alunoSomenteComentarios = alunoRepository.save(alunoSomenteComentarios);

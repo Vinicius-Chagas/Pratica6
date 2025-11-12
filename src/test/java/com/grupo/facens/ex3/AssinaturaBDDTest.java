@@ -3,6 +3,7 @@ package com.grupo.facens.ex3;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.grupo.facens.ex3.domain.entities.Aluno;
+import com.grupo.facens.ex3.domain.enums.TipoPlano;
 import com.grupo.facens.ex3.repository.AlunoRepository;
 import com.grupo.facens.ex3.service.AssinaturaService;
 import org.junit.jupiter.api.BeforeEach;
@@ -53,7 +54,7 @@ class AssinaturaBDDTest {
             .orElse(null);
 
         assertNotNull(alunoAtualizado);
-        assertEquals(Aluno.TipoPlano.BASICO, alunoAtualizado.getPlano());
+        assertEquals(TipoPlano.BASICO, alunoAtualizado.getPlano());
         assertTrue(alunoAtualizado.temPlanoBasico());
         assertTrue(
             assinaturaService.verificarAcessoPlanBasico(alunoAtualizado)
@@ -68,7 +69,7 @@ class AssinaturaBDDTest {
         assertTrue(aluno.temPlanoBasico());
         assertFalse(aluno.temPlanoPremium());
 
-        aluno.setPlano(Aluno.TipoPlano.PREMIUM);
+        aluno.setPlano(TipoPlano.PREMIUM);
         aluno = alunoRepository.save(aluno);
         assertFalse(aluno.temPlanoBasico());
         assertTrue(aluno.temPlanoPremium());
