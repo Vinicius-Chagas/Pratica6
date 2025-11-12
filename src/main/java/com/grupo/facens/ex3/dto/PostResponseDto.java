@@ -1,11 +1,10 @@
 package com.grupo.facens.ex3.dto;
 
-import com.grupo.facens.ex3.model.Post;
+import com.grupo.facens.ex3.domain.entities.Post;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -22,23 +21,25 @@ public class PostResponseDto {
 
     public static PostResponseDto fromEntity(Post post) {
         return new PostResponseDto(
-                post.getId(),
-                post.getTitulo(),
-                post.getConteudo(),
-                post.getAutor().getId(),
-                post.getAutor().getNome(),
-                post.getDataCriacao(),
-                post.getComentarios() != null ? post.getComentarios().size() : 0);
+            post.getId(),
+            post.getTitulo(),
+            post.getConteudo(),
+            post.getAutor().getId(),
+            post.getAutor().getNome(),
+            post.getDataCriacao(),
+            post.getComentarios() != null ? post.getComentarios().size() : 0
+        );
     }
 
     public static PostResponseDto fromEntitySimple(Post post) {
         return new PostResponseDto(
-                post.getId(),
-                post.getTitulo(),
-                post.getConteudo(),
-                post.getAutor().getId(),
-                post.getAutor().getNome(),
-                post.getDataCriacao(),
-                0);
+            post.getId(),
+            post.getTitulo(),
+            post.getConteudo(),
+            post.getAutor().getId(),
+            post.getAutor().getNome(),
+            post.getDataCriacao(),
+            0
+        );
     }
 }

@@ -1,5 +1,6 @@
-package com.grupo.facens.ex3.model;
+package com.grupo.facens.ex3.domain.entities;
 
+import com.grupo.facens.ex3.domain.enums.TipoPlano;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -34,11 +35,6 @@ public class Aluno {
 
     @Column
     private int creditoCurso;
-
-    public enum TipoPlano {
-        BASICO,
-        PREMIUM,
-    }
 
     public boolean temPlanoBasico() {
         return plano == TipoPlano.BASICO;

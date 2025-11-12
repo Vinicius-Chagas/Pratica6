@@ -1,6 +1,7 @@
 package com.grupo.facens.ex3.dto;
 
-import com.grupo.facens.ex3.model.Curso;
+import com.grupo.facens.ex3.domain.entities.Curso;
+import com.grupo.facens.ex3.domain.enums.Dificuldade;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -21,7 +22,7 @@ public class CursoRequestDto {
     private String categoria;
 
     @NotNull(message = "A dificuldade é obrigatória")
-    private Curso.Dificuldade dificuldade;
+    private Dificuldade dificuldade;
 
     private Integer cargaHoraria;
 

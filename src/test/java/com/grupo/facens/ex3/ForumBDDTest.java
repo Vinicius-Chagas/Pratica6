@@ -2,9 +2,9 @@ package com.grupo.facens.ex3;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import com.grupo.facens.ex3.model.Aluno;
-import com.grupo.facens.ex3.model.Comment;
-import com.grupo.facens.ex3.model.Post;
+import com.grupo.facens.ex3.domain.entities.Aluno;
+import com.grupo.facens.ex3.domain.entities.Comment;
+import com.grupo.facens.ex3.domain.entities.Post;
 import com.grupo.facens.ex3.repository.AlunoRepository;
 import com.grupo.facens.ex3.service.ForumService;
 import org.junit.jupiter.api.BeforeEach;

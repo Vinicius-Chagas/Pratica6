@@ -1,6 +1,6 @@
 package com.grupo.facens.ex3.dto;
 
-import com.grupo.facens.ex3.model.Aluno;
+import com.grupo.facens.ex3.domain.entities.Aluno;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

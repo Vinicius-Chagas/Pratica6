@@ -1,10 +1,11 @@
-package com.grupo.facens.ex3.model;
+package com.grupo.facens.ex3.domain.entities;
 
+import com.grupo.facens.ex3.domain.enums.Dificuldade;
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -41,12 +42,6 @@ public class Curso {
 
     @Column(name = "data_atualizacao")
     private LocalDateTime dataAtualizacao;
-
-    public enum Dificuldade {
-        INICIANTE,
-        INTERMEDIARIO,
-        AVANCADO
-    }
 
     @PrePersist
     protected void onCreate() {

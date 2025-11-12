@@ -1,11 +1,10 @@
 package com.grupo.facens.ex3.dto;
 
-import com.grupo.facens.ex3.model.Comment;
+import com.grupo.facens.ex3.domain.entities.Comment;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -21,11 +20,12 @@ public class CommentResponseDto {
 
     public static CommentResponseDto fromEntity(Comment comment) {
         return new CommentResponseDto(
-                comment.getId(),
-                comment.getConteudo(),
-                comment.getAutor().getId(),
-                comment.getAutor().getNome(),
-                comment.getPost().getId(),
-                comment.getDataCriacao());
+            comment.getId(),
+            comment.getConteudo(),
+            comment.getAutor().getId(),
+            comment.getAutor().getNome(),
+            comment.getPost().getId(),
+            comment.getDataCriacao()
+        );
     }
 }

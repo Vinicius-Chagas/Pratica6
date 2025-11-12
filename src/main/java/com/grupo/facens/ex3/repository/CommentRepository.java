@@ -1,8 +1,8 @@
 package com.grupo.facens.ex3.repository;
 
-import com.grupo.facens.ex3.model.Aluno;
-import com.grupo.facens.ex3.model.Comment;
-import com.grupo.facens.ex3.model.Post;
+import com.grupo.facens.ex3.domain.entities.Aluno;
+import com.grupo.facens.ex3.domain.entities.Comment;
+import com.grupo.facens.ex3.domain.entities.Post;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;

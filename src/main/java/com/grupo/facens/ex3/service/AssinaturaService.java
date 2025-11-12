@@ -1,6 +1,7 @@
 package com.grupo.facens.ex3.service;
 
-import com.grupo.facens.ex3.model.Aluno;
+import com.grupo.facens.ex3.domain.entities.Aluno;
+import com.grupo.facens.ex3.domain.enums.TipoPlano;
 import com.grupo.facens.ex3.repository.AlunoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,7 +21,7 @@ public class AssinaturaService {
 
     public void ativarAssinatura(Aluno aluno) {
         if (aluno != null) {
-            aluno.setPlano(Aluno.TipoPlano.BASICO);
+            aluno.setPlano(TipoPlano.BASICO);
             alunoRepository.save(aluno);
         }
     }
