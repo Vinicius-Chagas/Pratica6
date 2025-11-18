@@ -21,138 +21,166 @@ import org.springframework.test.web.servlet.MockMvc;
 @SuppressWarnings("removal")
 class MoedaControllerTest {
 
-    @Autowired
-    private MockMvc mockMvc;
+        @Autowired
+        private MockMvc mockMvc;
 
-    @MockBean
-    private MoedaService moedaService;
+        @MockBean
+        private MoedaService moedaService;
 
-    @MockBean
-    private AlunoRepository alunoRepository;
+        @MockBean
+        private AlunoRepository alunoRepository;
 
-    private Aluno aluno;
+        private Aluno aluno;
 
-    @BeforeEach
-    void setUp() {
-        aluno = new Aluno();
-        aluno.setId(3L);
-        aluno.setNome("Moedas");
-        aluno.setEmail("moedas@test.com");
-        aluno.setMoedas(10);
-        aluno.setCreditoCurso(0);
-    }
+        @BeforeEach
+        void setUp() {
+                aluno = new Aluno();
+                aluno.setId(3L);
+                aluno.setNome("Moedas");
+                aluno.setEmail("moedas@test.com");
+                aluno.setMoedas(10);
+                aluno.setCreditoCurso(0);
+        }
 
-    @Test
-    void deveAdicionarMoedas() throws Exception {
-        when(alunoRepository.findById(3L)).thenReturn(Optional.of(aluno));
-        doAnswer(invocation -> {
-            Aluno alvo = invocation.getArgument(0);
-            int quantidade = invocation.getArgument(1);
-            alvo.setMoedas(alvo.getMoedas() + quantidade);
-            return null;
-        })
-                .when(moedaService)
-                .adicionarMoedas(any(Aluno.class), eq(5));
+        @Test
+        void deveAdicionarMoedas() throws Exception {
+                when(alunoRepository.findById(3L)).thenReturn(Optional.of(aluno));
+                doAnswer(invocation -> {
+                        Aluno alvo = invocation.getArgument(0);
+                        int quantidade = invocation.getArgument(1);
+                        alvo.setMoedas(alvo.getMoedas() + quantidade);
+                        return null;
+                })
+                                .when(moedaService)
+                                .adicionarMoedas(any(Aluno.class), eq(5));
 
-        mockMvc
-                .perform(post("/api/moedas/3/adicionar").param("quantidade", "5"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.saldo").value(15));
-    }
+                mockMvc
+                                .perform(post("/api/moedas/3/adicionar").param("quantidade", "5"))
+                                .andExpect(status().isOk())
+                                .andExpect(jsonPath("$.saldo").value(15));
+        }
 
-    @Test
-    void deveRetornarNotFoundAoAdicionarMoedasParaAlunoInexistente()
-            throws Exception {
-        when(alunoRepository.findById(9L)).thenReturn(Optional.empty());
+        @Test
+        void deveRetornarNotFoundAoAdicionarMoedasParaAlunoInexistente()
+                        throws Exception {
+                when(alunoRepository.findById(9L)).thenReturn(Optional.empty());
 
-        mockMvc
-                .perform(post("/api/moedas/9/adicionar").param("quantidade", "5"))
-                .andExpect(status().isNotFound());
+                mockMvc
+                                .perform(post("/api/moedas/9/adicionar").param("quantidade", "5"))
+                                .andExpect(status().isNotFound());
 
-        verifyNoInteractions(moedaService);
-    }
+                verifyNoInteractions(moedaService);
+        }
 
-    @Test
-    void deveConverterMoedasParaCursos() throws Exception {
-        when(alunoRepository.findById(3L)).thenReturn(Optional.of(aluno));
-        when(moedaService.converterMoedasParaCursos(aluno, 4)).thenAnswer(invocation -> {
-            aluno.setMoedas(aluno.getMoedas() - 4);
-            aluno.setCreditoCurso(aluno.getCreditoCurso() + 4);
-            return true;
-        });
+        @Test
+        void deveConverterMoedasParaCursos() throws Exception {
+                when(alunoRepository.findById(3L)).thenReturn(Optional.of(aluno));
+                when(moedaService.converterMoedasParaCursos(aluno, 4)).thenAnswer(invocation -> {
+                        aluno.setMoedas(aluno.getMoedas() - 4);
+                        aluno.setCreditoCurso(aluno.getCreditoCurso() + 4);
+                        return true;
+                });
 
-        mockMvc
-                .perform(
-                        post("/api/moedas/3/converter-cursos").param("quantidade", "4"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.sucesso").value(true))
-                .andExpect(jsonPath("$.saldo").value(6))
-                .andExpect(jsonPath("$.creditos").value(4));
-    }
+                mockMvc
+                                .perform(
+                                                post("/api/moedas/3/converter-cursos").param("quantidade", "4"))
+                                .andExpect(status().isOk())
+                                .andExpect(jsonPath("$.sucesso").value(true))
+                                .andExpect(jsonPath("$.saldo").value(6))
+                                .andExpect(jsonPath("$.creditos").value(4));
+        }
 
-    @Test
-    void deveRetornarBadRequestQuandoConversaoDeCursosFalhar() throws Exception {
-        when(alunoRepository.findById(3L)).thenReturn(Optional.of(aluno));
-        when(moedaService.converterMoedasParaCursos(aluno, 30)).thenReturn(false);
+        @Test
+        void deveRetornarBadRequestQuandoConversaoDeCursosFalhar() throws Exception {
+                when(alunoRepository.findById(3L)).thenReturn(Optional.of(aluno));
+                when(moedaService.converterMoedasParaCursos(aluno, 30)).thenReturn(false);
 
-        mockMvc
-                .perform(
-                        post("/api/moedas/3/converter-cursos").param("quantidade", "30"))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.sucesso").value(false));
-    }
+                mockMvc
+                                .perform(
+                                                post("/api/moedas/3/converter-cursos").param("quantidade", "30"))
+                                .andExpect(status().isBadRequest())
+                                .andExpect(jsonPath("$.sucesso").value(false));
+        }
 
-    @Test
-    void deveConverterMoedasParaCriptomoedas() throws Exception {
-        when(alunoRepository.findById(3L)).thenReturn(Optional.of(aluno));
-        when(moedaService.converterMoedasParaCriptomoedas(aluno, 5)).thenAnswer(invocation -> {
-            aluno.setMoedas(aluno.getMoedas() - 5);
-            return true;
-        });
+        @Test
+        void deveRetornarNotFoundNaConversaoDeCursosQuandoAlunoInexistente()
+                        throws Exception {
+                when(alunoRepository.findById(70L)).thenReturn(Optional.empty());
 
-        mockMvc
-                .perform(
-                        post("/api/moedas/3/converter-criptomoedas").param(
-                                "quantidade",
-                                "5"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.sucesso").value(true))
-                .andExpect(jsonPath("$.saldo").value(5));
-    }
+                mockMvc
+                                .perform(
+                                                post("/api/moedas/70/converter-cursos")
+                                                                .param("quantidade", "5"))
+                                .andExpect(status().isNotFound());
 
-    @Test
-    void deveRetornarBadRequestQuandoConversaoCriptoFalhar() throws Exception {
-        when(alunoRepository.findById(3L)).thenReturn(Optional.of(aluno));
-        when(moedaService.converterMoedasParaCriptomoedas(aluno, 20))
-                .thenReturn(false);
+                verifyNoInteractions(moedaService);
+        }
 
-        mockMvc
-                .perform(
-                        post("/api/moedas/3/converter-criptomoedas").param(
-                                "quantidade",
-                                "20"))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.sucesso").value(false));
-    }
+        @Test
+        void deveConverterMoedasParaCriptomoedas() throws Exception {
+                when(alunoRepository.findById(3L)).thenReturn(Optional.of(aluno));
+                when(moedaService.converterMoedasParaCriptomoedas(aluno, 5)).thenAnswer(invocation -> {
+                        aluno.setMoedas(aluno.getMoedas() - 5);
+                        return true;
+                });
 
-    @Test
-    void deveConsultarSaldo() throws Exception {
-        when(alunoRepository.findById(3L)).thenReturn(Optional.of(aluno));
-        when(moedaService.consultarSaldo(aluno)).thenReturn(10);
+                mockMvc
+                                .perform(
+                                                post("/api/moedas/3/converter-criptomoedas").param(
+                                                                "quantidade",
+                                                                "5"))
+                                .andExpect(status().isOk())
+                                .andExpect(jsonPath("$.sucesso").value(true))
+                                .andExpect(jsonPath("$.saldo").value(5));
+        }
 
-        mockMvc
-                .perform(get("/api/moedas/3/saldo"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.saldo").value(10));
-    }
+        @Test
+        void deveRetornarBadRequestQuandoConversaoCriptoFalhar() throws Exception {
+                when(alunoRepository.findById(3L)).thenReturn(Optional.of(aluno));
+                when(moedaService.converterMoedasParaCriptomoedas(aluno, 20))
+                                .thenReturn(false);
 
-    @Test
-    void deveRetornarNotFoundAoConsultarSaldoDeAlunoInexistente()
-            throws Exception {
-        when(alunoRepository.findById(50L)).thenReturn(Optional.empty());
+                mockMvc
+                                .perform(
+                                                post("/api/moedas/3/converter-criptomoedas").param(
+                                                                "quantidade",
+                                                                "20"))
+                                .andExpect(status().isBadRequest())
+                                .andExpect(jsonPath("$.sucesso").value(false));
+        }
 
-        mockMvc
-                .perform(get("/api/moedas/50/saldo"))
-                .andExpect(status().isNotFound());
-    }
+        @Test
+        void deveRetornarNotFoundNaConversaoCriptoQuandoAlunoInexistente()
+                        throws Exception {
+                when(alunoRepository.findById(71L)).thenReturn(Optional.empty());
+
+                mockMvc
+                                .perform(
+                                                post("/api/moedas/71/converter-criptomoedas")
+                                                                .param("quantidade", "5"))
+                                .andExpect(status().isNotFound());
+
+                verifyNoInteractions(moedaService);
+        }
+
+        @Test
+        void deveConsultarSaldo() throws Exception {
+                when(alunoRepository.findById(3L)).thenReturn(Optional.of(aluno));
+                when(moedaService.consultarSaldo(aluno)).thenReturn(10);
+
+                mockMvc
+                                .perform(get("/api/moedas/3/saldo"))
+                                .andExpect(status().isOk())
+                                .andExpect(jsonPath("$.saldo").value(10));
+        }
+
+        @Test
+        void deveRetornarNotFoundAoConsultarSaldoDeAlunoInexistente()
+                        throws Exception {
+                when(alunoRepository.findById(50L)).thenReturn(Optional.empty());
+
+                mockMvc
+                                .perform(get("/api/moedas/50/saldo"))
+                                .andExpect(status().isNotFound());
+        }
 }

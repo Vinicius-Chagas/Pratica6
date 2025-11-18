@@ -7,15 +7,15 @@ import com.grupo.facens.ex3.dto.CursoResponseDto;
 import com.grupo.facens.ex3.repository.CursoRepository;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@RequiredArgsConstructor
 public class CursoService {
 
-    @Autowired
-    private CursoRepository cursoRepository;
+    private final CursoRepository cursoRepository;
 
     @Transactional
     public CursoResponseDto criarCurso(CursoRequestDto request) {
@@ -34,71 +34,64 @@ public class CursoService {
     @Transactional(readOnly = true)
     public List<CursoResponseDto> listarTodosCursos() {
         return cursoRepository
-            .findAll()
-            .stream()
-            .map(CursoResponseDto::fromEntity)
-            .collect(Collectors.toList());
+                .findAll()
+                .stream()
+                .map(CursoResponseDto::fromEntity)
+                .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
     public List<CursoResponseDto> listarCursosAtivos() {
         return cursoRepository
-            .findByAtivoTrue()
-            .stream()
-            .map(CursoResponseDto::fromEntity)
-            .collect(Collectors.toList());
+                .findByAtivoTrue()
+                .stream()
+                .map(CursoResponseDto::fromEntity)
+                .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
     public CursoResponseDto buscarPorId(Long id) {
         Curso curso = cursoRepository
-            .findById(id)
-            .orElseThrow(() ->
-                new IllegalArgumentException(
-                    "Curso não encontrado com ID: " + id
-                )
-            );
+                .findById(id)
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "Curso não encontrado com ID: " + id));
         return CursoResponseDto.fromEntity(curso);
     }
 
     @Transactional(readOnly = true)
     public List<CursoResponseDto> buscarPorCategoria(String categoria) {
         return cursoRepository
-            .findByCategoria(categoria)
-            .stream()
-            .map(CursoResponseDto::fromEntity)
-            .collect(Collectors.toList());
+                .findByCategoria(categoria)
+                .stream()
+                .map(CursoResponseDto::fromEntity)
+                .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
     public List<CursoResponseDto> buscarPorDificuldade(
-        Dificuldade dificuldade
-    ) {
+            Dificuldade dificuldade) {
         return cursoRepository
-            .findByDificuldade(dificuldade)
-            .stream()
-            .map(CursoResponseDto::fromEntity)
-            .collect(Collectors.toList());
+                .findByDificuldade(dificuldade)
+                .stream()
+                .map(CursoResponseDto::fromEntity)
+                .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
     public List<CursoResponseDto> buscarPorTitulo(String titulo) {
         return cursoRepository
-            .findByTituloContainingIgnoreCase(titulo)
-            .stream()
-            .map(CursoResponseDto::fromEntity)
-            .collect(Collectors.toList());
+                .findByTituloContainingIgnoreCase(titulo)
+                .stream()
+                .map(CursoResponseDto::fromEntity)
+                .collect(Collectors.toList());
     }
 
     @Transactional
     public CursoResponseDto atualizarCurso(Long id, CursoRequestDto request) {
         Curso curso = cursoRepository
-            .findById(id)
-            .orElseThrow(() ->
-                new IllegalArgumentException(
-                    "Curso não encontrado com ID: " + id
-                )
-            );
+                .findById(id)
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "Curso não encontrado com ID: " + id));
 
         curso.setTitulo(request.getTitulo());
         curso.setDescricao(request.getDescricao());
@@ -118,8 +111,7 @@ public class CursoService {
     public void deletarCurso(Long id) {
         if (!cursoRepository.existsById(id)) {
             throw new IllegalArgumentException(
-                "Curso não encontrado com ID: " + id
-            );
+                    "Curso não encontrado com ID: " + id);
         }
         cursoRepository.deleteById(id);
     }
@@ -127,12 +119,9 @@ public class CursoService {
     @Transactional
     public CursoResponseDto inativarCurso(Long id) {
         Curso curso = cursoRepository
-            .findById(id)
-            .orElseThrow(() ->
-                new IllegalArgumentException(
-                    "Curso não encontrado com ID: " + id
-                )
-            );
+                .findById(id)
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "Curso não encontrado com ID: " + id));
 
         curso.setAtivo(false);
         Curso cursoAtualizado = cursoRepository.save(curso);
@@ -142,12 +131,9 @@ public class CursoService {
     @Transactional
     public CursoResponseDto ativarCurso(Long id) {
         Curso curso = cursoRepository
-            .findById(id)
-            .orElseThrow(() ->
-                new IllegalArgumentException(
-                    "Curso não encontrado com ID: " + id
-                )
-            );
+                .findById(id)
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "Curso não encontrado com ID: " + id));
 
         curso.setAtivo(true);
         Curso cursoAtualizado = cursoRepository.save(curso);

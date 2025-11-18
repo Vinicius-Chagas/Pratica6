@@ -2,58 +2,50 @@ package com.grupo.facens.ex3.service;
 
 import com.grupo.facens.ex3.domain.entities.Aluno;
 import com.grupo.facens.ex3.repository.AlunoRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class MoedaService {
 
-    @Autowired
-    private AlunoRepository alunoRepository;
+    private final AlunoRepository alunoRepository;
 
     public void adicionarMoedas(Aluno aluno, int quantidade) {
         if (aluno != null && quantidade > 0) {
-            aluno.setMoedas(aluno.getMoedas() + quantidade);
+            aluno.adicionarMoedas(quantidade);
             alunoRepository.save(aluno);
         }
     }
 
     public boolean converterMoedasParaCursos(
-        Aluno aluno,
-        int quantidadeMoedas
-    ) {
+            Aluno aluno,
+            int quantidadeMoedas) {
         if (aluno == null || quantidadeMoedas <= 0) {
             return false;
         }
 
-        if (aluno.getMoedas() < quantidadeMoedas) {
+        if (!aluno.removerMoedas(quantidadeMoedas)) {
             return false;
         }
 
-        aluno.setMoedas(aluno.getMoedas() - quantidadeMoedas);
-        aluno.setCreditoCurso(aluno.getCreditoCurso() + quantidadeMoedas);
-
+        aluno.adicionarCreditosCurso(quantidadeMoedas);
         alunoRepository.save(aluno);
         return true;
     }
 
     public boolean converterMoedasParaCriptomoedas(
-        Aluno aluno,
-        int quantidadeMoedas
-    ) {
-        // Apenas mockado para o teste
+            Aluno aluno,
+            int quantidadeMoedas) {
         if (aluno == null || quantidadeMoedas <= 0) {
             return false;
         }
 
-        if (aluno.getMoedas() < quantidadeMoedas) {
+        if (!aluno.removerMoedas(quantidadeMoedas)) {
             return false;
         }
 
-        aluno.setMoedas(aluno.getMoedas() - quantidadeMoedas);
-
         alunoRepository.save(aluno);
-
         return true;
     }
 
@@ -70,8 +62,7 @@ public class MoedaService {
         }
 
         int moedasParaAdicionar = aluno.getCursosCompletados() * 3;
-        aluno.setMoedas(aluno.getMoedas() + moedasParaAdicionar);
-
+        aluno.adicionarMoedas(moedasParaAdicionar);
         alunoRepository.save(aluno);
     }
 }

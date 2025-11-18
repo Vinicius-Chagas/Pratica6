@@ -50,16 +50,15 @@ class AssinaturaBDDTest {
         assinaturaService.ativarAssinatura(null);
 
         Aluno alunoAtualizado = alunoRepository
-            .findById(aluno.getId())
-            .orElse(null);
+                .findById(aluno.getId())
+                .orElse(null);
 
         assertNotNull(alunoAtualizado);
         assertEquals(TipoPlano.BASICO, alunoAtualizado.getPlano());
         assertTrue(alunoAtualizado.temPlanoBasico());
         assertTrue(
-            assinaturaService.verificarAcessoPlanBasico(alunoAtualizado)
-        );
-        assertFalse(assinaturaService.verificarAcessoPlanBasico(null));
+                assinaturaService.verificarAcessoPlanoBasico(alunoAtualizado));
+        assertFalse(assinaturaService.verificarAcessoPlanoBasico(null));
     }
 
     @Test

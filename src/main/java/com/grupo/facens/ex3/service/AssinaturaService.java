@@ -3,16 +3,16 @@ package com.grupo.facens.ex3.service;
 import com.grupo.facens.ex3.domain.entities.Aluno;
 import com.grupo.facens.ex3.domain.enums.TipoPlano;
 import com.grupo.facens.ex3.repository.AlunoRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class AssinaturaService {
 
-    @Autowired
-    private AlunoRepository alunoRepository;
+    private final AlunoRepository alunoRepository;
 
-    public boolean verificarAcessoPlanBasico(Aluno aluno) {
+    public boolean verificarAcessoPlanoBasico(Aluno aluno) {
         if (aluno == null) {
             return false;
         }

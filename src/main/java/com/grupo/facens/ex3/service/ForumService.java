@@ -4,9 +4,6 @@ import com.grupo.facens.ex3.domain.entities.Aluno;
 import com.grupo.facens.ex3.domain.entities.Comment;
 import com.grupo.facens.ex3.domain.entities.Post;
 import com.grupo.facens.ex3.dto.ForumActivityDto;
-import com.grupo.facens.ex3.domain.entities.Aluno;
-import com.grupo.facens.ex3.domain.entities.Comment;
-import com.grupo.facens.ex3.domain.entities.Post;
 import com.grupo.facens.ex3.repository.CommentRepository;
 import com.grupo.facens.ex3.repository.PostRepository;
 import java.time.LocalDateTime;
@@ -15,17 +12,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class ForumService {
 
-    @Autowired
-    private PostRepository postRepository;
+    private final PostRepository postRepository;
 
-    @Autowired
-    private CommentRepository commentRepository;
+    private final CommentRepository commentRepository;
 
     public Post criarTopico(Aluno aluno, String titulo, String conteudo) {
         Post post = new Post();

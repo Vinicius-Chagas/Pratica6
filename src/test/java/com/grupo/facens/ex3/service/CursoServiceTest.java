@@ -30,13 +30,12 @@ class CursoServiceTest {
     @Test
     void deveCriarCurso() {
         CursoRequestDto request = new CursoRequestDto(
-            "Titulo",
-            "Descricao",
-            "Categoria",
-            Dificuldade.INTERMEDIARIO,
-            30,
-            null
-        );
+                "Titulo",
+                "Descricao",
+                "Categoria",
+                Dificuldade.INTERMEDIARIO,
+                30,
+                null);
 
         when(cursoRepository.save(any(Curso.class))).thenAnswer(invocation -> {
             Curso curso = invocation.getArgument(0);
@@ -51,9 +50,32 @@ class CursoServiceTest {
         assertThat(response.getTitulo()).isEqualTo("Titulo");
         assertThat(response.getCategoria()).isEqualTo("Categoria");
         assertThat(response.getDificuldade()).isEqualTo(
-            Dificuldade.INTERMEDIARIO
-        );
+                Dificuldade.INTERMEDIARIO);
         assertThat(response.getAtivo()).isTrue();
+        verify(cursoRepository).save(any(Curso.class));
+    }
+
+    @Test
+    void deveCriarCursoDesativadoQuandoCampoAtivoForFalse() {
+        CursoRequestDto request = new CursoRequestDto(
+                "Titulo Inativo",
+                "Descricao",
+                "Categoria",
+                Dificuldade.AVANCADO,
+                40,
+                false);
+
+        when(cursoRepository.save(any(Curso.class))).thenAnswer(invocation -> {
+            Curso curso = invocation.getArgument(0);
+            curso.setId(2L);
+            curso.setDataCriacao(LocalDateTime.now());
+            return curso;
+        });
+
+        CursoResponseDto response = cursoService.criarCurso(request);
+
+        assertThat(response.getId()).isEqualTo(2L);
+        assertThat(response.getAtivo()).isFalse();
         verify(cursoRepository).save(any(Curso.class));
     }
 
@@ -96,21 +118,17 @@ class CursoServiceTest {
     void deveLancarExcecaoQuandoCursoNaoEncontradoPorId() {
         when(cursoRepository.findById(5L)).thenReturn(Optional.empty());
 
-        assertThrows(IllegalArgumentException.class, () ->
-            cursoService.buscarPorId(5L)
-        );
+        assertThrows(IllegalArgumentException.class, () -> cursoService.buscarPorId(5L));
     }
 
     @Test
     void deveBuscarPorCategoria() {
         Curso curso = criarCurso(4L, true);
         when(cursoRepository.findByCategoria("Backend")).thenReturn(
-            List.of(curso)
-        );
+                List.of(curso));
 
         List<CursoResponseDto> cursos = cursoService.buscarPorCategoria(
-            "Backend"
-        );
+                "Backend");
 
         assertThat(cursos).hasSize(1);
         verify(cursoRepository).findByCategoria("Backend");
@@ -120,12 +138,10 @@ class CursoServiceTest {
     void deveBuscarPorDificuldade() {
         Curso curso = criarCurso(6L, true);
         when(
-            cursoRepository.findByDificuldade(Dificuldade.INICIANTE)
-        ).thenReturn(List.of(curso));
+                cursoRepository.findByDificuldade(Dificuldade.INICIANTE)).thenReturn(List.of(curso));
 
         List<CursoResponseDto> cursos = cursoService.buscarPorDificuldade(
-            Dificuldade.INICIANTE
-        );
+                Dificuldade.INICIANTE);
 
         assertThat(cursos).hasSize(1);
         verify(cursoRepository).findByDificuldade(Dificuldade.INICIANTE);
@@ -135,8 +151,7 @@ class CursoServiceTest {
     void deveBuscarPorTitulo() {
         Curso curso = criarCurso(7L, true);
         when(
-            cursoRepository.findByTituloContainingIgnoreCase("curso")
-        ).thenReturn(List.of(curso));
+                cursoRepository.findByTituloContainingIgnoreCase("curso")).thenReturn(List.of(curso));
 
         List<CursoResponseDto> cursos = cursoService.buscarPorTitulo("curso");
 
@@ -150,13 +165,12 @@ class CursoServiceTest {
         when(cursoRepository.findById(8L)).thenReturn(Optional.of(curso));
         when(cursoRepository.save(curso)).thenReturn(curso);
         CursoRequestDto request = new CursoRequestDto(
-            "Novo Titulo",
-            "Nova Descricao",
-            "Nova Categoria",
-            Dificuldade.AVANCADO,
-            45,
-            false
-        );
+                "Novo Titulo",
+                "Nova Descricao",
+                "Nova Categoria",
+                Dificuldade.AVANCADO,
+                45,
+                false);
 
         CursoResponseDto response = cursoService.atualizarCurso(8L, request);
 
@@ -167,20 +181,37 @@ class CursoServiceTest {
     }
 
     @Test
+    void deveManterStatusQuandoAtualizacaoNaoInformarCampoAtivo() {
+        Curso curso = criarCurso(81L, true);
+        when(cursoRepository.findById(81L)).thenReturn(Optional.of(curso));
+        when(cursoRepository.save(curso)).thenReturn(curso);
+
+        CursoRequestDto request = new CursoRequestDto(
+                "Atualizado",
+                "Descricao X",
+                "Categoria X",
+                Dificuldade.INICIANTE,
+                25,
+                null);
+
+        CursoResponseDto response = cursoService.atualizarCurso(81L, request);
+
+        assertThat(response.getAtivo()).isTrue();
+        verify(cursoRepository).save(curso);
+    }
+
+    @Test
     void deveLancarExcecaoAoAtualizarCursoInexistente() {
         CursoRequestDto request = new CursoRequestDto(
-            "Titulo",
-            "Descricao",
-            "Categoria",
-            Dificuldade.INICIANTE,
-            20,
-            true
-        );
+                "Titulo",
+                "Descricao",
+                "Categoria",
+                Dificuldade.INICIANTE,
+                20,
+                true);
         when(cursoRepository.findById(9L)).thenReturn(Optional.empty());
 
-        assertThrows(IllegalArgumentException.class, () ->
-            cursoService.atualizarCurso(9L, request)
-        );
+        assertThrows(IllegalArgumentException.class, () -> cursoService.atualizarCurso(9L, request));
     }
 
     @Test
@@ -196,9 +227,7 @@ class CursoServiceTest {
     void deveLancarExcecaoAoDeletarCursoInexistente() {
         when(cursoRepository.existsById(11L)).thenReturn(false);
 
-        assertThrows(IllegalArgumentException.class, () ->
-            cursoService.deletarCurso(11L)
-        );
+        assertThrows(IllegalArgumentException.class, () -> cursoService.deletarCurso(11L));
     }
 
     @Test

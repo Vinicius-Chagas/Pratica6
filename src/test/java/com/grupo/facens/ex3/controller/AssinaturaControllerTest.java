@@ -65,7 +65,7 @@ class AssinaturaControllerTest {
     void deveVerificarPlanoBasico() throws Exception {
         Aluno aluno = criarAlunoBasico();
         when(alunoRepository.findById(1L)).thenReturn(Optional.of(aluno));
-        when(assinaturaService.verificarAcessoPlanBasico(aluno)).thenReturn(true);
+        when(assinaturaService.verificarAcessoPlanoBasico(aluno)).thenReturn(true);
 
         mockMvc
                 .perform(get("/api/assinaturas/1/basico"))

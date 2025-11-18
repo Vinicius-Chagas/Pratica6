@@ -199,4 +199,14 @@ class ForumControllerTest {
                                 .andExpect(status().isOk())
                                 .andExpect(jsonPath("$.total").value(7));
         }
+
+        @Test
+        void deveRetornarNotFoundAoContarContribuicoesDeAlunoInexistente()
+                        throws Exception {
+                when(alunoRepository.findById(500L)).thenReturn(Optional.empty());
+
+                mockMvc
+                                .perform(get("/api/forum/alunos/500/contribuicoes"))
+                                .andExpect(status().isNotFound());
+        }
 }

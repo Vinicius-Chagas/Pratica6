@@ -46,7 +46,7 @@ public class AssinaturaController {
             return ResponseEntity.notFound().build();
         }
 
-        boolean possuiPlanoBasico = assinaturaService.verificarAcessoPlanBasico(
+        boolean possuiPlanoBasico = assinaturaService.verificarAcessoPlanoBasico(
                 alunoOptional.get());
         return ResponseEntity.ok(Map.of("planoBasico", possuiPlanoBasico));
     }

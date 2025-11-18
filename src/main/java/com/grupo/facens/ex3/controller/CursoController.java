@@ -11,7 +11,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,28 +19,19 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "Cursos", description = "Endpoints para gerenciamento de cursos")
 @RestController
 @RequestMapping("/api/cursos")
+@RequiredArgsConstructor
 public class CursoController {
 
-    @Autowired
-    private CursoService cursoService;
+    private final CursoService cursoService;
 
-    @Operation(
-        summary = "Criar um novo curso",
-        description = "Cria um novo curso no sistema"
-    )
-    @ApiResponses(
-        value = {
-            @ApiResponse(
-                responseCode = "201",
-                description = "Curso criado com sucesso"
-            ),
+    @Operation(summary = "Criar um novo curso", description = "Cria um novo curso no sistema")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Curso criado com sucesso"),
             @ApiResponse(responseCode = "400", description = "Dados inválidos"),
-        }
-    )
+    })
     @PostMapping
     public ResponseEntity<CursoResponseDto> criarCurso(
-        @Valid @RequestBody CursoRequestDto request
-    ) {
+            @Valid @RequestBody CursoRequestDto request) {
         try {
             CursoResponseDto response = cursoService.criarCurso(request);
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
@@ -49,28 +40,14 @@ public class CursoController {
         }
     }
 
-    @Operation(
-        summary = "Listar cursos",
-        description = "Lista todos os cursos ou apenas os ativos"
-    )
-    @ApiResponses(
-        value = {
-            @ApiResponse(
-                responseCode = "200",
-                description = "Lista de cursos retornada com sucesso"
-            ),
-            @ApiResponse(
-                responseCode = "500",
-                description = "Erro interno do servidor"
-            ),
-        }
-    )
+    @Operation(summary = "Listar cursos", description = "Lista todos os cursos ou apenas os ativos")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Lista de cursos retornada com sucesso"),
+            @ApiResponse(responseCode = "500", description = "Erro interno do servidor"),
+    })
     @GetMapping
     public ResponseEntity<List<CursoResponseDto>> listarCursos(
-        @Parameter(description = "Filtrar apenas cursos ativos") @RequestParam(
-            required = false
-        ) Boolean apenasAtivos
-    ) {
+            @Parameter(description = "Filtrar apenas cursos ativos") @RequestParam(required = false) Boolean apenasAtivos) {
         try {
             List<CursoResponseDto> cursos;
             if (apenasAtivos != null && apenasAtivos) {
@@ -81,35 +58,19 @@ public class CursoController {
             return ResponseEntity.ok(cursos);
         } catch (Exception e) {
             return ResponseEntity.status(
-                HttpStatus.INTERNAL_SERVER_ERROR
-            ).build();
+                    HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
-    @Operation(
-        summary = "Buscar curso por ID",
-        description = "Retorna um curso específico pelo seu ID"
-    )
-    @ApiResponses(
-        value = {
-            @ApiResponse(
-                responseCode = "200",
-                description = "Curso encontrado"
-            ),
-            @ApiResponse(
-                responseCode = "404",
-                description = "Curso não encontrado"
-            ),
-            @ApiResponse(
-                responseCode = "500",
-                description = "Erro interno do servidor"
-            ),
-        }
-    )
+    @Operation(summary = "Buscar curso por ID", description = "Retorna um curso específico pelo seu ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Curso encontrado"),
+            @ApiResponse(responseCode = "404", description = "Curso não encontrado"),
+            @ApiResponse(responseCode = "500", description = "Erro interno do servidor"),
+    })
     @GetMapping("/{id}")
     public ResponseEntity<CursoResponseDto> buscarCursoPorId(
-        @Parameter(description = "ID do curso") @PathVariable Long id
-    ) {
+            @Parameter(description = "ID do curso") @PathVariable Long id) {
         try {
             CursoResponseDto curso = cursoService.buscarPorId(id);
             return ResponseEntity.ok(curso);
@@ -117,69 +78,57 @@ public class CursoController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         } catch (Exception e) {
             return ResponseEntity.status(
-                HttpStatus.INTERNAL_SERVER_ERROR
-            ).build();
+                    HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
     @GetMapping("/categoria/{categoria}")
     public ResponseEntity<List<CursoResponseDto>> buscarPorCategoria(
-        @PathVariable String categoria
-    ) {
+            @PathVariable String categoria) {
         try {
             List<CursoResponseDto> cursos = cursoService.buscarPorCategoria(
-                categoria
-            );
+                    categoria);
             return ResponseEntity.ok(cursos);
         } catch (Exception e) {
             return ResponseEntity.status(
-                HttpStatus.INTERNAL_SERVER_ERROR
-            ).build();
+                    HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
     @GetMapping("/dificuldade/{dificuldade}")
     public ResponseEntity<List<CursoResponseDto>> buscarPorDificuldade(
-        @PathVariable Dificuldade dificuldade
-    ) {
+            @PathVariable Dificuldade dificuldade) {
         try {
             List<CursoResponseDto> cursos = cursoService.buscarPorDificuldade(
-                dificuldade
-            );
+                    dificuldade);
             return ResponseEntity.ok(cursos);
         } catch (Exception e) {
             return ResponseEntity.status(
-                HttpStatus.INTERNAL_SERVER_ERROR
-            ).build();
+                    HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
     @GetMapping("/buscar")
     public ResponseEntity<List<CursoResponseDto>> buscarPorTitulo(
-        @RequestParam String titulo
-    ) {
+            @RequestParam String titulo) {
         try {
             List<CursoResponseDto> cursos = cursoService.buscarPorTitulo(
-                titulo
-            );
+                    titulo);
             return ResponseEntity.ok(cursos);
         } catch (Exception e) {
             return ResponseEntity.status(
-                HttpStatus.INTERNAL_SERVER_ERROR
-            ).build();
+                    HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<CursoResponseDto> atualizarCurso(
-        @PathVariable Long id,
-        @Valid @RequestBody CursoRequestDto request
-    ) {
+            @PathVariable Long id,
+            @Valid @RequestBody CursoRequestDto request) {
         try {
             CursoResponseDto response = cursoService.atualizarCurso(
-                id,
-                request
-            );
+                    id,
+                    request);
             return ResponseEntity.ok(response);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -197,15 +146,13 @@ public class CursoController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         } catch (Exception e) {
             return ResponseEntity.status(
-                HttpStatus.INTERNAL_SERVER_ERROR
-            ).build();
+                    HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
     @PatchMapping("/{id}/inativar")
     public ResponseEntity<CursoResponseDto> inativarCurso(
-        @PathVariable Long id
-    ) {
+            @PathVariable Long id) {
         try {
             CursoResponseDto response = cursoService.inativarCurso(id);
             return ResponseEntity.ok(response);
@@ -213,8 +160,7 @@ public class CursoController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         } catch (Exception e) {
             return ResponseEntity.status(
-                HttpStatus.INTERNAL_SERVER_ERROR
-            ).build();
+                    HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
@@ -227,8 +173,7 @@ public class CursoController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         } catch (Exception e) {
             return ResponseEntity.status(
-                HttpStatus.INTERNAL_SERVER_ERROR
-            ).build();
+                    HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 }

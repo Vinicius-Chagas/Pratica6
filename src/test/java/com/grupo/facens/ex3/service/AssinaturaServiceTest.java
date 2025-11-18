@@ -50,13 +50,13 @@ class AssinaturaServiceTest {
     @Test
     void deveVerificarAcessoPlanoBasico() {
         aluno.setPlano(TipoPlano.BASICO);
-        assertThat(assinaturaService.verificarAcessoPlanBasico(aluno)).isTrue();
-        assertThat(assinaturaService.verificarAcessoPlanBasico(null)).isFalse();
+        assertThat(assinaturaService.verificarAcessoPlanoBasico(aluno)).isTrue();
+        assertThat(assinaturaService.verificarAcessoPlanoBasico(null)).isFalse();
     }
 
     @Test
     void deveRetornarFalsoQuandoNaoPossuiPlanoBasico() {
         aluno.setPlano(TipoPlano.PREMIUM);
-        assertThat(assinaturaService.verificarAcessoPlanBasico(aluno)).isFalse();
+        assertThat(assinaturaService.verificarAcessoPlanoBasico(aluno)).isFalse();
     }
 }
