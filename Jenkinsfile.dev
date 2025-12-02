@@ -13,12 +13,9 @@ pipeline {
             }
         }
 
-        stage('Build, Test & Verify') {
+        stage('Build, Test & Install') {
             steps {
                 script {
-                    // O comando 'verify' é essencial aqui.
-                    // Ele executa: Compilação -> Testes -> JaCoCo Report -> JaCoCo Check (Quality Gate do pom.xml) -> PMD
-                    // Suporte para Windows e Linux
                     if (isUnix()) {
                         sh 'mvn clean install'
                     } else {
@@ -35,8 +32,6 @@ pipeline {
             junit '**/target/surefire-reports/*.xml'
 
             // 2. Relatório de Cobertura (JaCoCo)
-            // Substituindo o plugin antigo 'jacoco' pelo 'recordCoverage' para visualização moderna e Quality Gate no Jenkins.
-            // O pom.xml gera o relatório em target/site/jacoco/jacoco.xml durante a fase 'test'/'verify'.
             recordCoverage(
                 tools: [[parser: 'JACOCO', pattern: '**/target/site/jacoco/jacoco.xml']],
                 qualityGates: [
