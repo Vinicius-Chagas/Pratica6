@@ -1,17 +1,6 @@
 pipeline {
     agent any
 
-    // 1. Configuração "Discard old builds" (General)
-    options {
-        buildDiscarder(logRotator(numToKeepStr: '10', artifactNumToKeepStr: '10'))
-    }
-
-    // Definição de ferramentas (Ajuste os nomes conforme seu "Global Tool Configuration")
-    tools {
-        maven 'Maven 3'
-        jdk 'Java 17'
-    }
-
     stages {
         // 2. Configuração "Source Code Management" (Git)
         stage('Checkout') {
