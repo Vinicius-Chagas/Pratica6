@@ -1,0 +1,64 @@
+pipeline {
+    agent any
+
+    // 1. Configuração "Discard old builds" (General)
+    options {
+        buildDiscarder(logRotator(numToKeepStr: '10', artifactNumToKeepStr: '10'))
+    }
+
+    // Definição de ferramentas (Ajuste os nomes conforme seu "Global Tool Configuration")
+    tools {
+        maven 'Maven 3'
+        jdk 'Java 17'
+    }
+
+    stages {
+        // 2. Configuração "Source Code Management" (Git)
+        stage('Checkout') {
+            steps {
+                git branch: 'master',
+                    url: 'https://github.com/Vinicius-Chagas/Pratica6.git'
+            }
+        }
+
+        // 3. Configuração "Build Steps" (Maven)
+        stage('Build & Test') {
+            steps {
+                // "Invoke top-level Maven targets: clean install"
+                // Se o seu Jenkins for Windows, troque 'sh' por 'bat'
+                sh 'mvn clean install'
+            }
+        }
+    }
+
+    post {
+        always {
+            // 4. "Publish JUnit test result report"
+            junit '**/target/surefire-reports/*.xml'
+
+            // 5. "Record code coverage results" (JaCoCo)
+            // A imagem mostra um Quality Gate de 99,0% para Line Coverage
+            jacoco(
+                execPattern: '**/target/jacoco.exec',
+                classPattern: '**/target/classes',
+                sourcePattern: '**/src/main/java',
+                inclusionPattern: '**/*.class',
+                changeBuildStatus: true, // Falha o build se não atingir a meta
+                minimumLineCoverage: '99.0'
+            )
+
+            // 6. "Record compiler warnings and static analysis results" (PMD)
+            // Plugin: Warnings Next Generation
+            recordIssues(
+                enabledForFailure: true,
+                tools: [pmdParser(pattern: '**/pmd.xml')]
+            )
+        }
+
+        success {
+            // 7. "Build other projects" (Image_Docker_AC2)
+            // Configurado para rodar apenas se "stable" (sucesso)
+            build job: 'Image_Docker_AC2', wait: false
+        }
+    }
+}
