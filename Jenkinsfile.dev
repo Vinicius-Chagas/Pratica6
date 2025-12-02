@@ -2,7 +2,6 @@ pipeline {
     agent any
 
     stages {
-        // 2. Configuração "Source Code Management" (Git)
         stage('Checkout') {
             steps {
                 git branch: 'master',
@@ -10,11 +9,10 @@ pipeline {
             }
         }
 
-        // 3. Configuração "Build Steps" (Maven)
-        stage('Build & Test') {
+        stage('Build, Test & Verify') {
             steps {
-                // "Invoke top-level Maven targets: clean install"
-                // Se o seu Jenkins for Windows, troque 'sh' por 'bat'
+                // O comando 'verify' é essencial aqui.
+                // Ele executa: Compilação -> Testes -> JaCoCo Report -> JaCoCo Check (Quality Gate do pom.xml) -> PMD
                 sh 'mvn clean install'
             }
         }
@@ -22,31 +20,28 @@ pipeline {
 
     post {
         always {
-            // 4. "Publish JUnit test result report"
+            // 1. Relatório de Testes (JUnit)
             junit '**/target/surefire-reports/*.xml'
 
-            // 5. "Record code coverage results" (JaCoCo)
-            // A imagem mostra um Quality Gate de 99,0% para Line Coverage
+            // 2. Relatório de Cobertura (JaCoCo)
+            // A validação de 99% já foi feita pelo Maven acima.
+            // Este passo aqui serve apenas para gerar o gráfico no painel do Jenkins.
             jacoco(
                 execPattern: '**/target/jacoco.exec',
                 classPattern: '**/target/classes',
                 sourcePattern: '**/src/main/java',
-                inclusionPattern: '**/*.class',
-                changeBuildStatus: true, // Falha o build se não atingir a meta
-                minimumLineCoverage: '99.0'
+                inclusionPattern: '**/*.class'
             )
 
-            // 6. "Record compiler warnings and static analysis results" (PMD)
-            // Plugin: Warnings Next Generation
+            // 3. Análise Estática (PMD)
             recordIssues(
                 enabledForFailure: true,
-                tools: [pmdParser(pattern: '**/pmd.xml')]
+                tools: [pmdParser(pattern: '**/target/pmd.xml')]
             )
         }
 
         success {
-            // 7. "Build other projects" (Image_Docker_AC2)
-            // Configurado para rodar apenas se "stable" (sucesso)
+            // Só executa se o Maven não falhar (ou seja, se cobertura >= 99%)
             build job: 'Image_Docker_AC2', wait: false
         }
     }
