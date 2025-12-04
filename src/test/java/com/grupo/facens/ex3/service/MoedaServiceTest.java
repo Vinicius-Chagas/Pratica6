@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 import com.grupo.facens.ex3.domain.entities.Aluno;
+import com.grupo.facens.ex3.infrastructure.blockchain.BlockchainTokenService;
 import com.grupo.facens.ex3.repository.AlunoRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,6 +18,9 @@ class MoedaServiceTest {
 
     @Mock
     private AlunoRepository alunoRepository;
+
+    @Mock
+    private BlockchainTokenService blockchainTokenService;
 
     @InjectMocks
     private MoedaService moedaService;

@@ -63,3 +63,5 @@ replay_pid*
 *.db-wal
 database.db
 test-database.db
+
+reference/

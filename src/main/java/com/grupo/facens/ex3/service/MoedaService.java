@@ -1,6 +1,7 @@
 package com.grupo.facens.ex3.service;
 
 import com.grupo.facens.ex3.domain.entities.Aluno;
+import com.grupo.facens.ex3.infrastructure.blockchain.BlockchainTokenService;
 import com.grupo.facens.ex3.repository.AlunoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -10,11 +11,18 @@ import org.springframework.stereotype.Service;
 public class MoedaService {
 
     private final AlunoRepository alunoRepository;
+    private final BlockchainTokenService blockchainTokenService;
 
     public void adicionarMoedas(Aluno aluno, int quantidade) {
         if (aluno != null && quantidade > 0) {
             aluno.adicionarMoedas(quantidade);
             alunoRepository.save(aluno);
+            // Registra na blockchain
+            blockchainTokenService.registrarMoedasEmBlockchain(
+                aluno.getId(), 
+                quantidade, 
+                "CREDITO"
+            );
         }
     }
 
@@ -31,6 +39,14 @@ public class MoedaService {
 
         aluno.adicionarCreditosCurso(quantidadeMoedas);
         alunoRepository.save(aluno);
+        
+        // Registra na blockchain
+        blockchainTokenService.registrarMoedasEmBlockchain(
+            aluno.getId(), 
+            quantidadeMoedas, 
+            "CONVERSAO"
+        );
+        
         return true;
     }
 
@@ -46,6 +62,14 @@ public class MoedaService {
         }
 
         alunoRepository.save(aluno);
+        
+        // Registra na blockchain
+        blockchainTokenService.registrarMoedasEmBlockchain(
+            aluno.getId(), 
+            quantidadeMoedas, 
+            "DEBITO"
+        );
+        
         return true;
     }
 
@@ -64,5 +88,12 @@ public class MoedaService {
         int moedasParaAdicionar = aluno.getCursosCompletados() * 3;
         aluno.adicionarMoedas(moedasParaAdicionar);
         alunoRepository.save(aluno);
+        
+        // Registra na blockchain
+        blockchainTokenService.registrarMoedasEmBlockchain(
+            aluno.getId(), 
+            moedasParaAdicionar, 
+            "CREDITO"
+        );
     }
 }
